@@ -27,39 +27,17 @@ public class Main {
 
         itemParser.parseStringIntoItem(output);
 
-        try {
-            for (int i = 0; i < 14; i++) {
-                items.add(itemParser.parseStringIntoItem(output, i));
-            }
-        } catch (ItemParseException e) {
-            errorCount++;
-        }
-        try {
-            for (int i = 14; i < 18; i++) {
-                items.add(itemParser.parseStringIntoItem(output, i));
-            }
+
+            for (int i = 0; i < 28; i++) {
+                try {
+                    items.add(itemParser.parseStringIntoItem(output, i));
 
         } catch (ItemParseException e) {
-            errorCount++;
+                    errorCount++;
+                    continue;
+                }
         }
-        try {
-            for (int i = 18; i < 24; i++) {
-                items.add(itemParser.parseStringIntoItem(output, i));
-            }
 
-        } catch (ItemParseException e) {
-            errorCount++;
-        }
-        try {
-            for (int i = 24; i < 28; i++) {
-                items.add(itemParser.parseStringIntoItem(output, i));
-            }
-
-        } catch (ItemParseException e) {
-            errorCount++;
-        }
-        Map<String, Long> counted = items.stream()
-                .map(item -> item.getName()).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
         String milk = Output.itemNamePrinter(items,"milk");
         String cookies= Output.itemNamePrinter(items,"cookies");
@@ -80,6 +58,6 @@ public class Main {
     }
 
 
-    // TODO: parse the data in output into items, and display to console.
+
 }
 
