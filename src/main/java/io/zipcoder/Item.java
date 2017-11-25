@@ -43,6 +43,8 @@ public class Item {
 
     @Override
     public String toString(){
-        return "name:" + name + " price:" + price + " type:" + type + " expiration:" + expiration;
+        return "name:   " + name.substring(0,1).toUpperCase()+name.substring(1,name.length()).toLowerCase()
+                + "   price:   " + price + "   type:   " + type.substring(0,1).toUpperCase()+type.substring(1,type.length()).toLowerCase() +
+                "   expiration:   " + expiration;
     }
 }
