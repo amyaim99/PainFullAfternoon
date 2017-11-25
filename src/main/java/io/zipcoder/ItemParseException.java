@@ -1,7 +1,7 @@
 package io.zipcoder;
 
-public class ItemParseException extends IndexOutOfBoundsException {
-    public ItemParseException (String message) {
-        super(message);
+public class ItemParseException extends Exception {
+    public ItemParseException () {
+        super();
     }
 }

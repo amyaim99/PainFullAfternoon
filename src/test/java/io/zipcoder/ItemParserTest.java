@@ -14,7 +14,7 @@ public class ItemParserTest {
 
     private String rawSingleItemIrregularSeperatorSample = "naMe:MiLK;price:3.23;type:Food^expiration:1/11/2016##";
 
-    private String rawBrokenSingleItem = "naMe:Milk;price:3.23;type:Food;expiration:1/25/2016##";
+    private String rawBrokenSingleItem = "naMe:;price:3.23;type:Food;expiration:1/25/2016##";
 
     private String rawMultipleItems = "naMe:Milk;price:3.23;type:Food;expiration:1/25/2016##"
             + "naME:BreaD;price:1.23;type:Food;expiration:1/02/2016##"
@@ -44,17 +44,20 @@ public class ItemParserTest {
     @Test(expected = ItemParseException.class)
     public void parseBrokenStringIntoItemTest() throws ItemParseException {
         itemParser.parseStringIntoItem(rawBrokenSingleItem);
+
+
     }
 
     @Test
-    public void findKeyValuePairsInRawItemDataTest() {
+    public void findKeyValuePairsInRawItemDataTest() throws ItemParseException {
         Integer expected = 4;
         Integer actual = itemParser.findKeyValuePairsInRawItemData(rawSingleItem).size();
         assertEquals(expected, actual);
+        System.out.println(itemParser.findKeyValuePairsInRawItemData(rawSingleItem).get(1));
     }
 
     @Test
-    public void findKeyValuePairsInRawItemDataTestIrregular() {
+    public void findKeyValuePairsInRawItemDataTestIrregular() throws ItemParseException {
         Integer expected = 4;
         Integer actual = itemParser.findKeyValuePairsInRawItemData(rawSingleItemIrregularSeperatorSample).size();
         assertEquals(expected, actual);
@@ -64,6 +67,7 @@ public class ItemParserTest {
     @Test
     public void parseStringIntoItemsNameTest() throws ItemParseException {
         ArrayList<String> separtedArrayList = itemParser.parseRawDataIntoStringArray(rawMultipleItems);
+
         ArrayList<String> separtedList1 = itemParser.findKeyValuePairsInRawItemData(separtedArrayList.get(0));
         ArrayList<String> separtedList2 = itemParser.findKeyValuePairsInRawItemData(separtedArrayList.get(1));
         ArrayList<String> separtedList3 = itemParser.findKeyValuePairsInRawItemData(separtedArrayList.get(2));
@@ -110,6 +114,7 @@ public class ItemParserTest {
         ArrayList<String> separtedList2 = itemParser.findKeyValuePairsInRawItemData(separtedArrayList.get(1));
         ArrayList<String> separtedList3 = itemParser.findKeyValuePairsInRawItemData(separtedArrayList.get(2));
 
+
         String expected1 = "FOOD";
         String expected2 = "FOOD";
         String expected3 = "FOOD";
@@ -131,6 +136,7 @@ public class ItemParserTest {
         ArrayList<String> separtedList2 = itemParser.findKeyValuePairsInRawItemData(separtedArrayList.get(1));
         ArrayList<String> separtedList3 = itemParser.findKeyValuePairsInRawItemData(separtedArrayList.get(2));
 
+
         String expected1 = "1/25/2016";
         String expected2 = "1/02/2016";
         String expected3 = "2/25/2016";
@@ -144,6 +150,23 @@ public class ItemParserTest {
         Assert.assertEquals(expected3, actual3);
 
     }
+    @Test
+    public void parseRawDataIntoSIngleItemDataTest()throws ItemParseException{
+        ArrayList<String> separtedArrayList = itemParser.parseRawDataIntoStringArray(rawMultipleItems);
+        ArrayList<String> separtedList = itemParser.findKeyValuePairsInRawItemData(separtedArrayList.get(0));
+
+        String expected = "[naMe:Milk, price:3.23, type:Food, expiration:1/25/2016]";
+        ArrayList<String> separatedPerItem = itemParser.parseRawDataIntoSIngleItemData(rawMultipleItems,0);
+
+       String actual = separatedPerItem.toString();
+
+       Assert.assertEquals(expected, actual);
+
+
+
+
+    }
+
 
     @Test
     public void parseIngleItemDataIntoNameTest() throws ItemParseException {
@@ -210,6 +233,7 @@ public class ItemParserTest {
         Assert.assertEquals(expected, actual);
         Assert.assertEquals(expected1, actual1);
         Assert.assertEquals(expected2, actual2);
+
 
     }
 }
