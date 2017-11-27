@@ -172,11 +172,17 @@ public class ItemParser {
 
     public String getNameFromRawItem(String rawItem) throws ItemParseException{
         ArrayList<String> separetedList = findKeyValuePairsInRawItemData(rawItem);
-        String namePair = separetedList.get(0);
+        String withToBeCorrectedName = separetedList.get(0);
         String name="";
+        Pattern namePattern = Pattern.compile("(c\\w\\wkies)", Pattern.CASE_INSENSITIVE);
+        Matcher nameMatch= namePattern.matcher(withToBeCorrectedName);
+
+        if (nameMatch.find()) {
+            withToBeCorrectedName = withToBeCorrectedName.replaceAll(nameMatch.group(),"cookies");
+        }
 
         try{
-            name = namePair.split(":")[1];
+            name = withToBeCorrectedName.split(":")[1];
         }catch (Exception e){
             new ItemParseException();
 
