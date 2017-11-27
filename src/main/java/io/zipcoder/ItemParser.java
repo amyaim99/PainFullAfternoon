@@ -188,8 +188,8 @@ public class ItemParser {
 
 
     public Double getPriceFromRawItem(String rawItem) throws ItemParseException{
-        ArrayList<String> keyValuePairs = findKeyValuePairsInRawItemData(rawItem);
-        String valuePair = keyValuePairs.get(1);
+        ArrayList<String> separetedList = findKeyValuePairsInRawItemData(rawItem);
+        String valuePair = separetedList.get(1);
         Double price = 0.0;
         try{
             String value = valuePair.split(":")[1];
@@ -202,8 +202,8 @@ public class ItemParser {
     }
 
     public String getTypeFromRawItem(String rawItem) throws ItemParseException {
-        ArrayList<String> keyValuePairs = findKeyValuePairsInRawItemData(rawItem);
-        String typePair = keyValuePairs.get(2);
+        ArrayList<String> separetedList = findKeyValuePairsInRawItemData(rawItem);
+        String typePair = separetedList.get(2);
         String type ="";
         try{ type = typePair.split(":")[1];
         }catch (Exception e){
@@ -214,8 +214,8 @@ public class ItemParser {
     }
 
     public String getExpirationDateFromRawItem(String rawItem) throws ItemParseException {
-        ArrayList<String> keyValuePairs = findKeyValuePairsInRawItemData(rawItem);
-        String expirationPair = keyValuePairs.get(3);
+        ArrayList<String> separetedList = findKeyValuePairsInRawItemData(rawItem);
+        String expirationPair = separetedList.get(3);
         String expiration="";
         try{
             expiration = expirationPair.split(":")[1];
