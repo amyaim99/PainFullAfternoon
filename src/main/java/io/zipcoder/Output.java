@@ -1,6 +1,10 @@
 package io.zipcoder;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Output {
 
@@ -51,4 +55,27 @@ public class Output {
 
         return String.format("%s\t\t\t\t" + "%" + n + "s" + "%" + n + "s" + "\n" , "Error" , "seen:" , itemParser.getErrorCounter() , " times");
     }
+
+    public static String itemsPrinter(ArrayList<Item> items){
+
+
+        String milk = Output.itemNamePrinter(items,"milk");
+        String cookies= Output.itemNamePrinter(items,"cookies");
+        String bread= Output.itemNamePrinter(items,"bread");
+        String apples= Output.itemNamePrinter(items,"apples");
+        String milkPrice1=  Output.itemPricePrinter(items,"milk",3.23);
+        String milkPrice2=  Output.itemPricePrinter(items,"milk",1.23);
+        String breadPrice=  Output.itemPricePrinter(items,"bread",1.23);
+        String cookiesPrice=  Output.itemPricePrinter(items,"cookies",2.25);
+        String applesPrice1=  Output.itemPricePrinter(items,"apples",0.25);
+        String applesPrice2=  Output.itemPricePrinter(items,"apples",0.23);
+
+        String  output1 = milk + milkPrice1 + milkPrice2 + bread + breadPrice + cookies + cookiesPrice + apples + applesPrice1 +
+                applesPrice2 ;
+
+       return output1;
+    }
+
 }
+
+

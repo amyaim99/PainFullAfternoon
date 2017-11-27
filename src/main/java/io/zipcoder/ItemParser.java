@@ -2,6 +2,8 @@ package io.zipcoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ItemParser {
     private int errorCounter;
@@ -37,9 +39,25 @@ public class ItemParser {
 
     }
 
+    public ArrayList<Item> parseStringIntoItems(String rawItem ) throws ItemParseException {
+        int  index = parseRawDataIntoStringArray(rawItem).size();
+        Item item = null;
+        ArrayList<Item> items = new ArrayList<>();
+    for (int i =0; i <index; i++) {
+        String name = parseIngleItemDataIntoName(rawItem , index).toUpperCase();
+        Double price = Double.parseDouble(parseIngleItemDataIntoPrice(rawItem , index));
+        String type = parseIngleItemDataIntoType(rawItem , index);
+        String expiration = parseIngleItemDataIntoExpirationDate(rawItem , index);
+        item = new Item(name , price , type , expiration);
+        items.add(item);
+
+    }
+    return items;
+    }
+
 
     public ArrayList<String> findKeyValuePairsInRawItemData(String rawItem) throws ItemParseException {
-        String stringPattern = "[;|^|@|%|*|!]";
+        String stringPattern = "[;|^|@|%|*|!|##]";
         ArrayList<String> separatedList = new ArrayList<String>();
         separatedList = parseRawDataIntoStringArray(rawItem);
         ArrayList<String> response = new ArrayList<String>();
@@ -57,13 +75,14 @@ public class ItemParser {
         ArrayList<String> separatedList = new ArrayList<String>();
         separatedList = findKeyValuePairsInRawItemData(rawItem);
         String stringPattern = "[:|^]";
+
         ArrayList<String> response;
-        if (!separatedList.get(0).equalsIgnoreCase("name:")) {
+        if (!separatedList.get(0).equalsIgnoreCase("name:")){
             response = splitStringWithRegexPattern(stringPattern , rawItem);
         } else {
             errorCounter++;
             response = null;
-            throw new ItemParseException();
+            throw new ItemParseException(); //
         }
 
 
@@ -83,12 +102,19 @@ public class ItemParser {
     public String parseIngleItemDataIntoName(String rawItem , int dataRaw) throws ItemParseException {
         String name = null;
 
+
         ArrayList<String> itemData = parseRawDataIntoSIngleItemData(rawItem , dataRaw);
 
-        ArrayList<String> itemInList = parseStringIntoItemsNamePriceType(itemData.get(0));
+            ArrayList<String> itemInList = parseStringIntoItemsNamePriceType(itemData.get(0));
+        if ((!itemData.get(0).equalsIgnoreCase("name:"))) {
+            name = itemInList.get(1);
+            return name;
+        }else {
+            errorCounter++;
+            name = null;
+            throw new ItemParseException(); //||(!separatedList.get(1).matches(stringPattern3))
+        }
 
-        name = itemInList.get(1);
-        return name;
     }
 
 
@@ -97,6 +123,7 @@ public class ItemParser {
         String price = null;
 
         ArrayList<String> itemData = parseRawDataIntoSIngleItemData(rawItem , dataRaw);
+
         if (!itemData.get(1).equalsIgnoreCase("price:")) {
             ArrayList<String> itemInList = parseStringIntoItemsNamePriceType(itemData.get(1));
 
@@ -141,6 +168,80 @@ public class ItemParser {
 
 
     }
+
+
+    public String getNameFromRawItem(String rawItem) throws ItemParseException{
+        ArrayList<String> separetedList = findKeyValuePairsInRawItemData(rawItem);
+        String namePair = separetedList.get(0);
+        String name="";
+
+        try{
+            name = namePair.split(":")[1];
+        }catch (Exception e){
+            new ItemParseException();
+
+        }
+        return name;
+
+    }
+
+
+
+    public Double getPriceFromRawItem(String rawItem) throws ItemParseException{
+        ArrayList<String> keyValuePairs = findKeyValuePairsInRawItemData(rawItem);
+        String valuePair = keyValuePairs.get(1);
+        Double price = 0.0;
+        try{
+            String value = valuePair.split(":")[1];
+            price = Double.parseDouble(value);
+        }catch (Exception e){
+            new ItemParseException();
+
+        }
+        return price;
+    }
+
+    public String getTypeFromRawItem(String rawItem) throws ItemParseException {
+        ArrayList<String> keyValuePairs = findKeyValuePairsInRawItemData(rawItem);
+        String typePair = keyValuePairs.get(2);
+        String type ="";
+        try{ type = typePair.split(":")[1];
+        }catch (Exception e){
+            new ItemParseException();
+
+        }
+        return type;
+    }
+
+    public String getExpirationDateFromRawItem(String rawItem) throws ItemParseException {
+        ArrayList<String> keyValuePairs = findKeyValuePairsInRawItemData(rawItem);
+        String expirationPair = keyValuePairs.get(3);
+        String expiration="";
+        try{
+            expiration = expirationPair.split(":")[1];
+        }catch(Exception e){
+            new ItemParseException();
+
+        }
+        return expiration;
+    }
+
+    public Item parseStringIntoItem2(String rawItem) throws ItemParseException {
+
+        try {
+            String name = getNameFromRawItem(rawItem).toLowerCase();
+            Double price = getPriceFromRawItem(rawItem);
+            String type = getTypeFromRawItem(rawItem).toLowerCase();
+            String expiration = getExpirationDateFromRawItem(rawItem).toLowerCase();
+            Item item = new Item(name , price , type , expiration);
+            return item;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new ItemParseException();
+        }
+    }
+
+
+
 
     public String getToBeChecked() {
         return toBeChecked;

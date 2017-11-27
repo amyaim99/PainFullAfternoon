@@ -38,12 +38,15 @@ public class ItemParserTest {
     public void parseStringIntoItemTest() throws ItemParseException {
         Item expected = new Item("milk", 3.23, "food", "1/25/2016");
         Item actual = itemParser.parseStringIntoItem(rawSingleItem);
+        Item actual2 = itemParser.parseStringIntoItem2(rawSingleItem);
         assertEquals(expected.toString(), actual.toString());
+        assertEquals(expected.toString(), actual2.toString());
     }
 
     @Test(expected = ItemParseException.class)
     public void parseBrokenStringIntoItemTest() throws ItemParseException {
         itemParser.parseStringIntoItem(rawBrokenSingleItem);
+        itemParser.parseStringIntoItem2(rawBrokenSingleItem);
 
 
     }
@@ -52,6 +55,9 @@ public class ItemParserTest {
     public void findKeyValuePairsInRawItemDataTest() throws ItemParseException {
         Integer expected = 4;
         Integer actual = itemParser.findKeyValuePairsInRawItemData(rawSingleItem).size();
+        String actual1 = itemParser.findKeyValuePairsInRawItemData(rawSingleItem).get(0);
+        System.out.println(actual1);
+
         assertEquals(expected, actual);
         System.out.println(itemParser.findKeyValuePairsInRawItemData(rawSingleItem).get(1));
     }
@@ -67,6 +73,7 @@ public class ItemParserTest {
     @Test
     public void parseStringIntoItemsNameTest() throws ItemParseException {
         ArrayList<String> separtedArrayList = itemParser.parseRawDataIntoStringArray(rawMultipleItems);
+
 
         ArrayList<String> separtedList1 = itemParser.findKeyValuePairsInRawItemData(separtedArrayList.get(0));
         ArrayList<String> separtedList2 = itemParser.findKeyValuePairsInRawItemData(separtedArrayList.get(1));
@@ -203,7 +210,7 @@ public class ItemParserTest {
     }
 
     @Test
-    public void parseIngleItemDataIntoTypeTest() throws ItemParseException {
+    public void parseSingleItemDataIntoTypeTest() throws ItemParseException {
 
         String expected = "FOOD";
         String expected1 = "FOOD";
@@ -211,7 +218,7 @@ public class ItemParserTest {
 
         String actual = itemParser.parseIngleItemDataIntoType(rawMultipleItems, 0).toUpperCase();
         String actual1 = itemParser.parseIngleItemDataIntoType(rawMultipleItems, 1).toUpperCase();
-        String actual2 = itemParser.parseIngleItemDataIntoType(rawMultipleItems, 2).toUpperCase();
+        String actual2 = itemParser.getTypeFromRawItem(rawMultipleItems).toUpperCase();
 
         Assert.assertEquals(expected, actual);
         Assert.assertEquals(expected1, actual1);
@@ -228,7 +235,7 @@ public class ItemParserTest {
 
         String actual = itemParser.parseIngleItemDataIntoExpirationDate(rawMultipleItems, 0).toUpperCase();
         String actual1 = itemParser.parseIngleItemDataIntoExpirationDate(rawMultipleItems, 1).toUpperCase();
-        String actual2 = itemParser.parseIngleItemDataIntoExpirationDate(rawMultipleItems, 2).toUpperCase();
+        String actual2 = itemParser.parseIngleItemDataIntoExpirationDate(rawMultipleItems,2).toUpperCase();
 
         Assert.assertEquals(expected, actual);
         Assert.assertEquals(expected1, actual1);
@@ -236,4 +243,52 @@ public class ItemParserTest {
 
 
     }
+
+    @Test
+    public void getNameFromRawDataTest() throws ItemParseException {
+
+        String expected1 = "MILK";
+
+        String actual1 = itemParser.getNameFromRawItem(rawSingleItem).toUpperCase();
+
+        Assert.assertEquals(expected1, actual1);
+
+    }
+
+    @Test
+    public void getPriceFromRawDataTest() throws ItemParseException {
+
+        String expected1 = "3.23";
+
+        String actual1 = itemParser.getPriceFromRawItem(rawMultipleItems).toString();
+
+        Assert.assertEquals(expected1, actual1);
+
+
+    }
+
+    @Test
+    public void getTypeFromRawDataTest() throws ItemParseException {
+
+        String expected = "FOOD";
+
+        String actual = itemParser.getTypeFromRawItem(rawMultipleItems).toUpperCase();
+
+        Assert.assertEquals(expected, actual);
+
+    }
+
+    @Test
+    public void getExpirationDateFromRawDataTest() throws ItemParseException {
+
+        String expected = "1/25/2016";
+
+
+        String actual = itemParser.getExpirationDateFromRawItem(rawMultipleItems).toUpperCase();
+
+
+        Assert.assertEquals(expected, actual);
+    }
+
+
 }

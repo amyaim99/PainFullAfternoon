@@ -63,5 +63,11 @@ public class OutputTest {
         String expected = "Error\t\t\t\tseen: 1";
         String actual = Output.itemErrorPrinter(itemParser).trim();
         Assert.assertEquals(expected, actual);
+
+
+
     }
+
+
+
 }
